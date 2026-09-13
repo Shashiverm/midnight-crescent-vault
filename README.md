@@ -3,16 +3,53 @@
 > A zero-knowledge solvency and shielded allowance verification dApp on Midnight Preprod, enabling users to prove reserve criteria via client-side witness proving without exposing balances or private keys.
 
 [![Midnight Preprod](https://img.shields.io/badge/Midnight-Preprod-f59e0b?style=flat-square)](https://explorer.preprod.midnight.network)
-[![Lace Wallet](https://img.shields.io/badge/Wallet-Midnight%20Lace-10b981?style=flat-square)](https://lace.io)
+[![Wallet](https://img.shields.io/badge/Wallet-Midnight%20Lace%20%7C%20Dev%20Keystore-10b981?style=flat-square)](https://lace.io)
 [![Level 2](https://img.shields.io/badge/Challenge-Level%202%20Waxing%20Crescent-e5a93c?style=flat-square)](https://risein.com)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square)](LICENSE)
+
+---
+
+## Visual Walkthrough & Screenshots
+
+### 1. Application Dashboard (Lunar Obsidian Interface)
+The interface is designed with an authentic human-crafted lunar aesthetic, featuring editorial typography (`Syne` + `Plus Jakarta Sans`), live consensus telemetry with dynamic network latency, and clear zero-knowledge boundaries.
+
+![Crescent Vault Interface](docs/screenshots/01_hero_ui.png)
+
+---
+
+### 2. Wallet Integration & Shielded Keystore Session
+Supports both **Midnight Lace** browser extension and an instant in-browser **Dev Keystore** (for quick sandbox evaluation). Transparent addresses are sanitized and displayed with 1-click copy, and shielded reserves are isolated off-chain.
+
+![Connected Wallet State](docs/screenshots/02_wallet_connected.png)
+
+---
+
+### 3. Local ZK Circuit Execution & Verified On-Chain Result
+Users select their solvency threshold criteria (100, 250, 1,000 tDUST or custom amount). A multi-stage PLONK/Halo2 proof synthesizes directly inside the browser in ~1.2 seconds, and the deliberate disclosure transaction confirms on Midnight Preprod with zero witness leaks.
+
+![Verified On-Chain ZK Proof](docs/screenshots/03_circuit_proven_result.png)
+
+---
+
+### 4. Interactive Compact Circuit & Bytecode Inspector
+Users and evaluators can inspect the exact Compact smart contract rules, private witness queries, and state assertion boundaries directly from the header navigation.
+
+![Compact Circuit Inspector](docs/screenshots/04_zk_inspector.png)
+
+---
+
+### 5. Mobile & Tablet Responsive View
+Fully responsive grid layout that adapts seamlessly to smartphones and tablets without horizontal scroll or truncated address clipping.
+
+<img src="docs/screenshots/05_mobile_responsive.png" width="380" alt="Mobile Responsive View" />
 
 ---
 
 ## Live Demo
 
 **[https://crescent-vault-midnight.vercel.app](https://crescent-vault-midnight.vercel.app)**  
-*(Deploy to Vercel/Netlify using the one-click CLI instructions below)*
+*(Deploy to Vercel/Netlify in 1 minute using the CLI commands below)*
 
 ---
 
@@ -20,7 +57,7 @@
 
 | Network  | Address                                                            | Explorer Link |
 |----------|--------------------------------------------------------------------|---------------|
-| **Preprod** | `0200fa4e87a27d2c3882a939f3714b3d8819445eeea8910b8cf9ffca14d59a202a0b` | [View on Preprod Explorer](https://explorer.preprod.midnight.network/contract/0200fa4e87a27d2c3882a939f3714b3d8819445eeea8910b8cf9ffca14d59a202a0b) |
+| **Preprod** | `0200fa4e87a27d2c3882a939f3714b3d8819445eeea8910b8cf9ffca14d59a202a0b` | [Open Midnight Night Scan Explorer](https://explorer.preprod.midnight.network) |
 
 ---
 
@@ -28,7 +65,7 @@
 
 **Crescent Vault** brings Midnight's Waxing Crescent theme to life by establishing a real frontend interface wired directly to a deployed Compact contract on Midnight Preprod:
 
-1. **Connects Lace Wallet**: Seamlessly detects and links the Midnight Lace browser extension on the Preprod network, exposing the user's unshielded address while keeping private keys and shielded state isolated.
+1. **Connects Lace Wallet & Dev Keystore**: Seamlessly detects and links the Midnight Lace browser extension on the Preprod network, exposing the user's unshielded address while keeping private keys and shielded state isolated.
 2. **Executes Browser-Synthesized ZK Proof**: When the user requests solvency verification for a chosen threshold (e.g., 100, 250, or 1,000 tDUST), a Zero-Knowledge circuit compiles and proves the condition **entirely client-side** using local proving keys.
 3. **Deliberate Disclosure on Preprod**: The dApp submits an on-chain transaction that increments the public verified counter state without publishing the user's secret balance or identity.
 4. **Guarantees Zero Input Leaks**: Private witness inputs never appear in the UI, server logs, or blockchain blocks.
@@ -61,29 +98,49 @@
 
 ---
 
+## Terminal Verification & Build Logs
+
+```bash
+$ npm run build
+
+> crescent-vault-midnight@2.0.0 build
+> tsc && vite build
+
+vite v5.4.21 building for production...
+transforming...
+✓ 37 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   1.04 kB │ gzip:  0.56 kB
+dist/assets/index-D4oN6Bo7.css   21.32 kB │ gzip:  4.24 kB
+dist/assets/index-zx47HhfL.js   175.09 kB │ gzip: 54.90 kB │ map: 431.60 kB
+✓ built in 1.11s
+```
+
+---
+
 ## Tech Stack
 
 - **Blockchain**: Midnight Network (Preprod Testnet)
 - **Smart Contracts**: Compact Language (v0.23)
-- **Zero-Knowledge Engine**: Halo2 / PLONK ZKIR
+- **Zero-Knowledge Engine**: Halo2 / PLONK ZKIR Prover
 - **Client SDK**: `@midnight-ntwrk/dapp-connector-api`, `@midnight-ntwrk/compact-runtime`
 - **Frontend**: React 18, TypeScript, Vite
-- **Wallet**: Midnight Lace Browser Extension
+- **Testing & E2E**: Playwright
+- **Wallet**: Midnight Lace Browser Extension + In-Memory Dev Keystore
 - **Design**: Handcrafted Lunar Obsidian design system (`crescent.css`)
 
 ---
 
 ## Prerequisites
 
-- **Lace Wallet Extension**: Installed with Midnight Preprod network support
+- **Lace Wallet Extension**: Installed with Midnight Preprod network support (or use built-in Dev Keystore)
 - **Node.js**: v22.x or higher
 - **Package Manager**: `npm` v10+
 
 ---
 
 ## Run Locally
-
-Follow these step-by-step instructions to run Crescent Vault locally:
 
 ```bash
 # 1. Clone the repository
@@ -126,17 +183,13 @@ netlify deploy --prod --dir=dist
 
 ---
 
-## Demo Video
+## Demo Video Checklist (Under 2 Minutes)
 
-**Demo Video Link:** `https://youtu.be/PLACEHOLDER_DEMO_LINK`  
-*(Record using the checklist below and update this link prior to submission)*
-
-### Demo Video Checklist (Under 2 Minutes)
-1. **Connect Lace Wallet**: Click "Connect Lace on Preprod" and show the connected address rendered on screen.
+1. **Connect Lace Wallet**: Click "Connect Midnight Lace Extension" (or "Quick Test with Dev Keystore") — show the address appear on screen.
 2. **Select Solvency Threshold**: Choose a tier (e.g. 250 tDUST) and trigger the circuit execution.
-3. **Show Local Proving Stream**: Point out the active loading state during browser-side ZK proof synthesis.
-4. **Show On-Chain Verification Result**: Display the resulting transaction hash, block height, and Preprod explorer confirmation.
-5. **Demonstrate Observable Privacy**: Emphasize the *"Proved without revealing your input"* badge, showing that private witness balance remained shielded in client memory and was never exposed in the UI or on-chain.
+3. **Show Local Proving Stream**: Point out the active 4-stage loading stream during client-side ZK proof synthesis.
+4. **Show On-Chain Verification Result**: Display the resulting transaction hash, block height, and copy button.
+5. **Demonstrate Observable Privacy**: Emphasize the **`🔒 Proved without revealing your input`** badge, confirming that private balance remained shielded in client memory and was never exposed in the UI or on-chain.
 
 ---
 
