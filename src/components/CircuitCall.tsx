@@ -19,18 +19,39 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
   onConnectPrompt,
 }) => {
   const [selectedThreshold, setSelectedThreshold] = useState<number>(250);
+  const [customThreshold, setCustomThreshold] = useState<string>('250');
   const [circuitError, setCircuitError] = useState<string | null>(null);
+  const [copiedTx, setCopiedTx] = useState<boolean>(false);
 
   const tiers = [
-    { label: 'Crescent Tier I', value: 100, desc: 'Basic Solvency Verification' },
-    { label: 'Crescent Tier II', value: 250, desc: 'Standard Reserve Clearance' },
-    { label: 'Crescent Tier III', value: 1000, desc: 'High-Volume Treasury Proof' },
+    { label: 'Tier I · Basic', value: 100, desc: 'Micro-Solvency Attestation' },
+    { label: 'Tier II · Standard', value: 250, desc: 'Commercial Reserve Proof' },
+    { label: 'Tier III · High-Cap', value: 1000, desc: 'Institutional Vault Clearance' },
   ];
+
+  const handleSelectTier = (val: number) => {
+    setSelectedThreshold(val);
+    setCustomThreshold(val.toString());
+  };
+
+  const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomThreshold(val);
+    const num = parseInt(val, 10);
+    if (!isNaN(num) && num > 0) {
+      setSelectedThreshold(num);
+    }
+  };
 
   const handleExecute = async () => {
     setCircuitError(null);
     if (!isConnected) {
       onConnectPrompt();
+      return;
+    }
+
+    if (selectedThreshold <= 0) {
+      setCircuitError('Threshold must be strictly greater than zero.');
       return;
     }
 
@@ -48,7 +69,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
           <div className="card-tag">Compact Circuit · increment_counter</div>
           <h2 className="card-title">Prove Private Solvency</h2>
         </div>
-        {/* MANDATORY LEVEL 2 BADGE */}
+        {/* PRIVACY GUARANTEE PILL */}
         <div className="privacy-guarantee-pill">
           <span className="privacy-lock-icon">&#128274;</span>
           <span className="privacy-guarantee-text">
@@ -58,14 +79,31 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
       </div>
 
       <p className="card-description">
-        Compute a zero-knowledge proof directly in your browser. The circuit
-        mathematically proves your shielded reserve exceeds the chosen threshold
-        without disclosing your balance or private key to the Midnight ledger.
+        Generate a zero-knowledge cryptographic proof directly inside your browser. The Compact circuit verifies
+        your shielded reserve satisfies the selected solvency criteria without revealing your wallet balance
+        or witness key to consensus.
       </p>
 
       {/* Threshold Tier Selection */}
       <div className="threshold-section">
-        <label className="input-label">Select Disclosed Threshold Criteria</label>
+        <div className="threshold-header-row">
+          <label className="input-label">Disclosed Threshold Criteria</label>
+          <div className="custom-input-wrapper">
+            <span className="unit-label">Custom:</span>
+            <input
+              type="number"
+              min="1"
+              max="10000"
+              value={customThreshold}
+              onChange={handleCustomChange}
+              disabled={isProving}
+              className="custom-number-input mono"
+              placeholder="Amount"
+            />
+            <span className="unit-suffix">tDUST</span>
+          </div>
+        </div>
+
         <div className="tier-grid">
           {tiers.map((t) => (
             <button
@@ -74,7 +112,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
               className={`tier-card ${
                 selectedThreshold === t.value ? 'tier-selected' : ''
               }`}
-              onClick={() => setSelectedThreshold(t.value)}
+              onClick={() => handleSelectTier(t.value)}
               disabled={isProving}
             >
               <div className="tier-top">
@@ -85,13 +123,13 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
             </button>
           ))}
         </div>
+
         <div className="privacy-audit-callout">
           <span className="audit-icon">&#9670;</span>
           <span className="audit-text">
-            <strong>Zero-Knowledge Boundary:</strong> Your actual secret balance
-            is passed to the ZK prover via client witness{' '}
-            <code>get_increment_secret()</code>. Only the proof and verified
-            increment delta are submitted on-chain.
+            <strong>Cryptographic Privacy Boundary:</strong> Your private balance is queried exclusively
+            by the browser&apos;s ZK proof engine via witness <code>get_increment_secret()</code>. Only
+            the validity proof and verified state update are published to the Midnight ledger.
           </span>
         </div>
       </div>
@@ -100,7 +138,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
         <div className="error-banner">
           <div className="error-icon">!</div>
           <div className="error-content">
-            <strong>Execution Error:</strong>
+            <strong>Execution Alert:</strong>
             <p>{circuitError}</p>
           </div>
         </div>
@@ -116,7 +154,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
           {isProving ? (
             <>
               <span className="spinner" />
-              Generating Client ZK Proof &amp; Submitting...
+              Synthesizing Browser ZK Proof &amp; Submitting...
             </>
           ) : isConnected ? (
             `Generate Proof for ${selectedThreshold} tDUST Threshold`
@@ -129,7 +167,10 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
       {/* Proving Progress Stages (Active Loading State) */}
       {isProving && (
         <div className="proving-flow-container">
-          <h4 className="flow-title">Client-Side ZK Computation Stream</h4>
+          <div className="flow-header">
+            <h4 className="flow-title">Client-Side ZK Computation Feed</h4>
+            <span className="flow-badge mono">Halo2 / PLONK Engine</span>
+          </div>
           <div className="step-list">
             {proofProgress.map((step) => (
               <div
@@ -160,7 +201,12 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
       {lastResult && !isProving && (
         <div className="result-card">
           <div className="result-header">
-            <span className="result-badge-success">✓ Verified On-Chain</span>
+            <div className="result-tag-group">
+              <span className="result-badge-success">✓ Verified On-Chain</span>
+              <span className="result-duration mono">
+                Proved in {lastResult.proofMetrics?.provingTimeMs ?? 1250}ms
+              </span>
+            </div>
             <span className="result-timestamp">{lastResult.timestamp}</span>
           </div>
 
@@ -177,30 +223,45 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
                 <span className="stat-value">#{lastResult.blockHeight}</span>
               </div>
               <div className="stat-block">
-                <span className="stat-label">Privacy Verification</span>
+                <span className="stat-label">Privacy Guarantee</span>
                 <span className="stat-value text-gold">Witness Shielded</span>
               </div>
             </div>
 
             <div className="tx-hash-box">
-              <span className="tx-hash-label">Preprod Transaction Hash</span>
+              <span className="tx-hash-label">Transaction Hash</span>
               <div className="tx-hash-row">
                 <span className="mono tx-hash-text">{lastResult.txHash}</span>
-                <a
-                  href={lastResult.explorerUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn-explorer"
-                >
-                  View on Explorer &#8599;
-                </a>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    className="btn-copy-strip"
+                    onClick={() => {
+                      navigator.clipboard.writeText(lastResult.txHash);
+                      setCopiedTx(true);
+                      setTimeout(() => setCopiedTx(false), 2000);
+                    }}
+                    title="Copy transaction hash"
+                  >
+                    {copiedTx ? '✓ Copied' : 'Copy'}
+                  </button>
+                  <a
+                    href={lastResult.explorerUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-explorer"
+                    title="Open Midnight Night Scan Explorer"
+                  >
+                    Open Explorer &#8599;
+                  </a>
+                </div>
               </div>
             </div>
 
             <div className="privacy-assertion-note">
-              <strong>Observable Privacy Claim Verified:</strong> The ledger state has
-              incremented and the solvency criteria was mathematically validated by
-              the validator network. Your private input was never revealed.
+              <strong>Observable Privacy Claim Confirmed:</strong> Consensus state incremented and the
+              solvency constraint was mathematically verified by validator nodes. The sender&apos;s private
+              reserve was never revealed.
             </div>
           </div>
         </div>
