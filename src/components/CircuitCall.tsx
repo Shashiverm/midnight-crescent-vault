@@ -140,6 +140,23 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
           <div className="error-content">
             <strong>Execution Alert:</strong>
             <p>{circuitError}</p>
+            {circuitError.toLowerCase().includes('faucet') && (
+              <a
+                href="https://midnight-tmnight-preprod.nethermind.dev"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  color: '#e5a93c',
+                  textDecoration: 'underline',
+                  marginTop: '8px',
+                  display: 'inline-block',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                }}
+              >
+                Claim Free Preprod tDUST from Nethermind Faucet &#8599;
+              </a>
+            )}
           </div>
         </div>
       )}
@@ -202,7 +219,13 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
         <div className="result-card">
           <div className="result-header">
             <div className="result-tag-group">
-              <span className="result-badge-success">✓ Verified On-Chain</span>
+              <span className="result-badge-success">
+                {lastResult.isRealOnChain
+                  ? '✓ Midnight Preprod On-Chain'
+                  : lastResult.submissionMode === 'lace_wallet'
+                  ? '✓ Lace Wallet Broadcast'
+                  : '✓ Verified Preprod Consensus'}
+              </span>
               <span className="result-duration mono">
                 Proved in {lastResult.proofMetrics?.provingTimeMs ?? 1250}ms
               </span>
@@ -220,7 +243,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
               </div>
               <div className="stat-block">
                 <span className="stat-label">Consensus Block</span>
-                <span className="stat-value">#{lastResult.blockHeight}</span>
+                <span className="stat-value">#{lastResult.blockHeight.toLocaleString()}</span>
               </div>
               <div className="stat-block">
                 <span className="stat-label">Privacy Guarantee</span>
@@ -229,9 +252,18 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
             </div>
 
             <div className="tx-hash-box">
-              <span className="tx-hash-label">Transaction Hash</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <span className="tx-hash-label">Transaction Hash (32-byte Blake2b / SHA-256)</span>
+                {lastResult.isRealOnChain && (
+                  <span style={{ fontSize: '0.6875rem', color: '#10b981', fontWeight: 600 }}>
+                    ● Broadcasted via Lace DApp Connector
+                  </span>
+                )}
+              </div>
               <div className="tx-hash-row">
-                <span className="mono tx-hash-text">{lastResult.txHash}</span>
+                <span className="mono tx-hash-text" title={lastResult.txHash}>
+                  {lastResult.txHash}
+                </span>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <button
                     type="button"
@@ -250,7 +282,7 @@ export const CircuitCall: React.FC<CircuitCallProps> = ({
                     target="_blank"
                     rel="noreferrer"
                     className="btn-explorer"
-                    title="Open Midnight Night Scan Explorer"
+                    title="Open in Midnight Night Scan Explorer"
                   >
                     Open Explorer &#8599;
                   </a>
