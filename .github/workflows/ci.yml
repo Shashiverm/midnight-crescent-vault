@@ -2,9 +2,9 @@ name: CI Build & Verification
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, Main ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, Main ]
 
 jobs:
   build:

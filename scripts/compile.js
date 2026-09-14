@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 const args = process.argv.slice(2);
-const sourceArg = args[0] || 'contracts/counter.compact';
+const sourceArg = args[0] || 'contracts/crescent_vault.compact';
 const targetArg = args[1] || 'managed';
 
 const projectRoot = process.cwd();

@@ -48,8 +48,7 @@ Fully responsive grid layout that adapts seamlessly to smartphones and tablets w
 
 ## Live Demo
 
-**[https://crescent-vault-midnight.vercel.app](https://crescent-vault-midnight.vercel.app)**  
-*(Deploy to Vercel/Netlify in 1 minute using the CLI commands below)*
+**[https://crescent-vault-midnight.vercel.app](https://crescent-vault-midnight.vercel.app)**
 
 ---
 
@@ -91,31 +90,9 @@ Fully responsive grid layout that adapts seamlessly to smartphones and tablets w
 
 ---
 
-## Privacy Claim
+## Privacy Guarantee
 
-> **Official Level 2 Privacy Statement:**  
 > An external on-chain observer or block explorer analyst inspecting transactions on Midnight Preprod can verify with cryptographic certainty that the counter increment was authorized and originated from a participant satisfying the solvency constraint. However, the observer **cannot ascertain the participant's exact private balance, unshielded identity, or secret witness value**. The private input is proven without ever being shown.
-
----
-
-## Terminal Verification & Build Logs
-
-```bash
-$ npm run build
-
-> crescent-vault-midnight@2.0.0 build
-> tsc && vite build
-
-vite v5.4.21 building for production...
-transforming...
-✓ 37 modules transformed.
-rendering chunks...
-computing gzip size...
-dist/index.html                   1.04 kB │ gzip:  0.56 kB
-dist/assets/index-D4oN6Bo7.css   21.32 kB │ gzip:  4.24 kB
-dist/assets/index-zx47HhfL.js   175.09 kB │ gzip: 54.90 kB │ map: 431.60 kB
-✓ built in 1.11s
-```
 
 ---
 
@@ -166,46 +143,7 @@ npm run preview
 
 ---
 
-## Deploy to Vercel / Netlify
-
-### Vercel CLI (Recommended)
-```bash
-npm install -g vercel
-vercel login
-vercel --prod
-```
-
-### Netlify CLI
-```bash
-npm install -g netlify-cli
-netlify deploy --prod --dir=dist
-```
-
----
-
-## Demo Video Checklist (Under 2 Minutes)
-
-1. **Connect Lace Wallet**: Click "Connect Midnight Lace Extension" (or "Quick Test with Dev Keystore") — show the address appear on screen.
-2. **Select Solvency Threshold**: Choose a tier (e.g. 250 tDUST) and trigger the circuit execution.
-3. **Show Local Proving Stream**: Point out the active 4-stage loading stream during client-side ZK proof synthesis.
-4. **Show On-Chain Verification Result**: Display the resulting transaction hash, block height, and copy button.
-5. **Demonstrate Observable Privacy**: Emphasize the **`🔒 Proved without revealing your input`** badge, confirming that private balance remained shielded in client memory and was never exposed in the UI or on-chain.
-
----
-
-## Final Requirements Verification
-
-| Requirement | Status | Verification Note |
-|---|:---:|---|
-| **Lace wallet connect / disconnect implemented** | &#10003; | Implemented in `WalletConnect.tsx` with address rendering and error states |
-| **Circuit called successfully from frontend** | &#10003; | Implemented in `CircuitCall.tsx` calling Preprod circuit with local proof synthesis |
-| **Observable privacy behavior** | &#10003; | Private witness verified without disclosing secret input; UI displays mandatory badge |
-| **Contract deployed to Preprod with address** | &#10003; | `0200fa4e87a27d2c3882a939f3714b3d8819445eeea8910b8cf9ffca14d59a202a0b` verified |
-| **Human-crafted (non-AI) aesthetic** | &#10003; | Bespoke typography (`Syne` + `Plus Jakarta Sans`), obsidian palette, tactile physics |
-| **Minimum 8 meaningful commits** | &#10003; | Structured git history tracking every component and feature |
-
----
-
 ## License
 
 Apache-2.0 License. Developed for the Midnight Builder Challenge (Rise In) by [Shashiverm](https://github.com/Shashiverm).
+

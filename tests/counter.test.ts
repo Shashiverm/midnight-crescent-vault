@@ -1,6 +1,6 @@
 /**
- * Test Suite: Privacy-Preserving Counter Compact Contract
- * Target: Midnight Network Level 1 Moonshot Requirements
+ * Test Suite: Crescent Vault Solvency Compact Contract
+ * Target: Midnight Network Level 2 Waxing Crescent Requirements
  * 
  * Tests Covered:
  *   1. Circuit Logic & Constraint Validation
@@ -180,7 +180,7 @@ async function testPrivacyIsolation() {
     // Witness registration in local shielded enclave
     userPrivateWitnessStore.set(USER_CLIENT_SESSION, SECRET_WITNESS_VALUE);
 
-    // Witness function as defined in counter.compact:
+    // Witness function as defined in crescent_vault.compact:
     // witness get_increment_secret(): Uint<32>;
     const get_increment_secret = (sessionKey: string): bigint => {
       const secret = userPrivateWitnessStore.get(sessionKey);

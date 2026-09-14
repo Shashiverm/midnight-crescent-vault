@@ -140,7 +140,7 @@ async function main() {
         address: deployedContractAddress,
         deployer: mockDeployer,
         deployedAt: new Date().toISOString(),
-        contract: 'counter.compact',
+        contract: 'crescent_vault.compact',
       },
     },
   };
